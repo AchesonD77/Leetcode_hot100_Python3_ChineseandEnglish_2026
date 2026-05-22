@@ -175,7 +175,7 @@ For example:
 ## 时间复杂度
 ## Time Complexity
 
-:contentReference[oaicite:0]{index=0}
+### O(n)
 
 因为只遍历一次数组。
 
@@ -185,7 +185,7 @@ Because we only traverse the array once.
 
 # 空间复杂度 | Space Complexity
 
-:contentReference[oaicite:1]{index=1}
+### O(n)
 
 因为使用了哈希表存储数据。
 
@@ -215,7 +215,11 @@ O(n)
 
 Optimize from:
 
-:contentReference[oaicite:2]{index=2}
+O(n²)
+
+↓
+
+O(n)
 
 这是算法中最经典的优化思想之一。
 
