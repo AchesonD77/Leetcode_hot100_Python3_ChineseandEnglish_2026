@@ -6,6 +6,45 @@
 
 ![alt text](<../../Snap_for_Questions/7_Linked_Lists_链表/截屏2026-07-03 19.09.34.png>)
 
+直接代码：
+```python
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+"""
+
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        # 判断是否为空 -> 是空，直接返回
+        if not head:
+            return None
+        # 构建hashmap
+        hashmap = {} # hashmap = dict()
+
+        # 进行第一遍遍历，得到所有的复制节点
+        cur = head
+        while cur:
+            hashmap[cur] = Node(cur.val)
+            cur = cur.next
+        
+        # 第二遍遍历，进行next链接，然后random链接
+        cur = head
+        while cur:
+            if cur.next:
+                hashmap[cur].next = hashmap[cur.next]
+            
+            if cur.random:
+                hashmap[cur].random = hashmap[cur.random]
+            
+            cur = cur.next
+        return hashmap[head]
+```
+
+
 # 一、题目描述
 
 给你一个特殊的链表，每个节点包含两个指针：
@@ -41,7 +80,6 @@ None
 > **复制整个链表（深拷贝），返回新的链表头节点。**
 
 注意：
-
 复制后的链表：
 
 - 节点值相同
@@ -54,7 +92,6 @@ None
 # 二、什么叫深拷贝（Deep Copy）？
 
 例如：
-
 原链表：
 
 ```
@@ -111,19 +148,13 @@ Deep Copy（深拷贝）
 
 ```
 B'
-
 ↓
-
 random
-
 ↓
-
 A
 ```
 
-那么：
-
-复制链表：
+那么，复制链表：
 
 仍然依赖：
 
@@ -163,9 +194,7 @@ next
 
 复制非常简单。
 
-但是：
-
-本题还有：
+但是 本题还有：
 
 ```
 random
@@ -201,7 +230,6 @@ random 可以：
 - 指向 None
 
 所以：
-
 **不能边复制边连接 random。**
 
 ---
@@ -239,7 +267,6 @@ new.random
 ```
 
 这样：
-
 复制出来的新链表：
 
 仍然依赖：
@@ -321,7 +348,6 @@ C → C'
 ```
 
 以后：
-
 如果：
 
 ```
@@ -364,25 +390,19 @@ random：
 
 ```
 7
-
 ↓
-
 None
 ```
 
 ```
 13
-
 ↓
-
 7
 ```
 
 ```
 11
-
 ↓
-
 13
 ```
 
@@ -400,9 +420,7 @@ None
 11'
 ```
 
-注意：
-
-目前：
+注意，目前：
 
 ```
 next
@@ -426,9 +444,7 @@ HashMap
 
 ```
 7  → 7'
-
 13 → 13'
-
 11 → 11'
 ```
 
@@ -446,17 +462,13 @@ HashMap
 
 ```
 7'.next
-
 ↓
-
 13'
 ```
 
 ```
 13'.next
-
 ↓
-
 11'
 ```
 
@@ -474,9 +486,7 @@ HashMap
 
 ```
 13.random
-
 ↓
-
 7
 ```
 
@@ -484,13 +494,9 @@ HashMap
 
 ```
 13'.random
-
 ↓
-
 HashMap[7]
-
 ↓
-
 7'
 ```
 
@@ -498,9 +504,7 @@ HashMap[7]
 
 ```
 11'.random
-
 ↓
-
 13'
 ```
 
@@ -533,13 +537,10 @@ class Solution:
         cur = head
 
         while cur:
-
             if cur.next:
                 hashmap[cur].next = hashmap[cur.next]
-
             if cur.random:
                 hashmap[cur].random = hashmap[cur.random]
-
             cur = cur.next
 
         return hashmap[head]
@@ -581,7 +582,6 @@ hashmap = {}
 ```
 
 注意：
-
 这里：
 
 ```
@@ -589,13 +589,13 @@ Key
 
 不是：
 
-节点值
+节点值 .val
 ```
 
 而是：
 
 ```
-节点对象
+节点对象 ListNode()
 ```
 
 因为：
@@ -649,6 +649,7 @@ cur = head
 ```python
 hashmap[cur] = Node(cur.val)
 ```
+这里leetcode定义了class类Node，所以在平时我们要看给了我们什么class。
 
 作用：复制当前节点。
 
@@ -721,12 +722,10 @@ cur = cur.next
 # 十、为什么第一遍不能直接连接 random？（★★★★★）
 
 例如：
-
 现在：
 
 ```
 正在复制：
-
 7
 ```
 
@@ -734,9 +733,7 @@ cur = cur.next
 
 ```
 7.random
-
 ↓
-
 11
 ```
 
@@ -744,14 +741,11 @@ cur = cur.next
 
 ```
 11'
-
 还没有创建！
 ```
 
 所以：
-
 第一遍：
-
 只能：
 
 ```
@@ -765,7 +759,6 @@ cur = cur.next
 ```
 
 因此：
-
 必须：
 
 ```
@@ -797,11 +790,8 @@ HashMap 方法的核心只有一句话：
 ```
 复制节点
 ↓
-
 建立：
-
 原节点 → 新节点
-
 映射
 ```
 
@@ -809,9 +799,7 @@ HashMap 方法的核心只有一句话：
 
 ```
 连接 next
-
 ↓
-
 连接 random
 ```
 
@@ -819,7 +807,6 @@ HashMap 方法的核心只有一句话：
 
 无论 `random` 指向前面、后面、自己还是 `None`，都能够正确找到对应的新节点。
 
-# LeetCode 138. 随机链表的复制（Copy List with Random Pointer）—— Part 2（HashMap 解法）
 
 ---
 
@@ -829,7 +816,6 @@ HashMap 方法的核心只有一句话：
 
 ```
 原链表
-
 7 → 13 → 11
 ```
 
@@ -837,9 +823,7 @@ HashMap 方法的核心只有一句话：
 
 ```
 7'
-
 13'
-
 11'
 ```
 
@@ -847,9 +831,7 @@ HashMap 方法的核心只有一句话：
 
 ```
 7  → 7'
-
 13 → 13'
-
 11 → 11'
 ```
 
@@ -857,9 +839,7 @@ HashMap 方法的核心只有一句话：
 
 ```
 7'
-
 13'
-
 11'
 ```
 
@@ -870,7 +850,6 @@ HashMap 方法的核心只有一句话：
 ```
 连接 next
 ↓
-
 连接 random
 ```
 
@@ -890,9 +869,7 @@ cur = head
 
 ```
 cur
-
 ↓
-
 None
 ```
 
@@ -910,7 +887,6 @@ if cur.next:
 这是整个 HashMap 解法最重要的一句。
 
 例如：
-
 原链表：
 
 ```
@@ -921,9 +897,7 @@ if cur.next:
 
 ```
 cur
-
 ↓
-
 7
 ```
 
@@ -931,9 +905,7 @@ cur
 
 ```
 cur.next
-
 ↓
-
 13
 ```
 
@@ -941,17 +913,13 @@ cur.next
 
 ```
 hashmap[cur]
-
 ↓
-
 7'
 ```
 
 ```
 hashmap[cur.next]
-
 ↓
-
 13'
 ```
 
@@ -967,9 +935,7 @@ hashmap[cur.next]
 
 ```
 7
-
 ↓
-
 13
 ```
 
@@ -977,9 +943,7 @@ hashmap[cur.next]
 
 ```
 7'
-
 ↓
-
 13'
 ```
 
@@ -995,14 +959,10 @@ if cur.random:
 ```
 
 例如：
-
 原链表：
-
 ```
 13.random
-
 ↓
-
 7
 ```
 
@@ -1010,17 +970,13 @@ if cur.random:
 
 ```
 hashmap[13]
-
 ↓
-
 13'
 ```
 
 ```
 hashmap[7]
-
 ↓
-
 7'
 ```
 
@@ -1031,14 +987,11 @@ hashmap[7]
 ```
 
 同样：
-
 如果：
 
 ```
 11.random
-
 ↓
-
 13
 ```
 
@@ -1046,14 +999,11 @@ hashmap[7]
 
 ```
 11'.random
-
 ↓
-
 13'
 ```
 
 这样：
-
 random 也复制完成。
 
 ---
@@ -1098,9 +1048,7 @@ return head
 
 ```
 head
-
 是：
-
 原链表。
 ```
 
@@ -1110,11 +1058,8 @@ head
 
 ```
 HashMap
-
 里面：
-
 head
-
 对应的新节点。
 ```
 
@@ -1122,9 +1067,7 @@ head
 
 ```
 head
-
 ↓
-
 7
 ```
 
@@ -1132,9 +1075,7 @@ HashMap：
 
 ```
 7
-
 ↓
-
 7'
 ```
 
@@ -1152,44 +1093,7 @@ return hashmap[head]
 
 ---
 
-# 十三、完整 LeetCode 代码（★★★★★）
-
-```python
-class Solution:
-
-    def copyRandomList(self, head):
-
-        if not head:
-            return None
-
-        hashmap = {}
-
-        cur = head
-
-        while cur:
-
-            hashmap[cur] = Node(cur.val)
-
-            cur = cur.next
-
-        cur = head
-
-        while cur:
-
-            if cur.next:
-                hashmap[cur].next = hashmap[cur.next]
-
-            if cur.random:
-                hashmap[cur].random = hashmap[cur.random]
-
-            cur = cur.next
-
-        return hashmap[head]
-```
-
----
-
-# 十四、ACM 模式
+# 十三、ACM 模式
 
 ```python
 def copyRandomList(head):
@@ -1241,14 +1145,11 @@ hashmap = dict()
 ```
 
 作用：
-
 保存：
 
 ```
 原节点
-
 ↓
-
 新节点
 ```
 
@@ -1268,7 +1169,6 @@ hashmap[cur]
 
 ```
 当前原节点
-
 对应的新节点。
 ```
 
@@ -1276,9 +1176,7 @@ hashmap[cur]
 
 ```
 hashmap[13]
-
 ↓
-
 13'
 ```
 
@@ -1312,7 +1210,6 @@ Node(7)
 
 ```
 next
-
 random
 ```
 
@@ -1322,14 +1219,10 @@ random
 
 ## 4. `cur.next`
 
-作用：
-
-得到：
+作用：得到：
 
 ```
-当前节点
-
-的下一个节点。
+当前节点的下一个节点。
 ```
 
 例如：
@@ -1342,9 +1235,7 @@ random
 
 ```
 7.next
-
 ↓
-
 13
 ```
 
@@ -1352,9 +1243,7 @@ random
 
 ## 5. `cur.random`
 
-作用：
-
-得到：
+作用：得到：
 
 ```
 当前节点 random 指向的节点。
@@ -1364,9 +1253,7 @@ random
 
 ```
 13.random
-
 ↓
-
 7
 ```
 
@@ -1396,7 +1283,6 @@ cur.random
 
 ```
 value
-
 作为 Key
 ```
 
@@ -1404,17 +1290,13 @@ HashMap：
 
 ```
 3
-
 ↓
-
 ???
 ```
 
 三个节点都会覆盖。
 
-因此：
-
-不能使用：
+因此：不能使用：
 
 ```
 值。
@@ -1430,22 +1312,17 @@ HashMap：
 
 ```
 NodeA
-
 ↓
-
 NodeA'
 ```
 
 ```
 NodeB
-
 ↓
-
 NodeB'
 ```
 
 这样：
-
 即使：
 
 ```
@@ -1483,9 +1360,7 @@ HashMap：
 保存：
 
 ```
-n
-
-个节点。
+n个节点。
 ```
 
 因此：
@@ -1538,9 +1413,7 @@ O(1)
 穿插节点法。
 ```
 
-这就是：
-
-本题真正的最优解。
+本题的最优解。
 
 ---
 
